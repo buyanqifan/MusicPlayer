@@ -4,4 +4,4 @@
 
 v1.0
 
-![image](https://github.com/AngelSXD/sxd_first_repository/blob/master/images/20160615165142.png)
+![image](https://github.com/buyanqifan/MusicPlayer/blob/master/image/pic.png)

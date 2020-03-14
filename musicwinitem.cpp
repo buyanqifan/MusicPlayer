@@ -1,6 +1,7 @@
 #include "musicwinitem.h"
 #include "ui_musicwinitem.h"
 #include "ui_musicplayer.h"
+#include <QElapsedTimer>
 
 MusicWinItem::MusicWinItem(QWidget *parent) :
     QWidget(parent),
@@ -21,6 +22,7 @@ void MusicWinItem::setsongmsg(QString songmsg)
 
 void MusicWinItem::setpic(QString picurl)
 {
+
     QUrl url(picurl);
     QNetworkRequest request(url);
 
@@ -30,6 +32,11 @@ void MusicWinItem::setpic(QString picurl)
 
     connect(reply, &QNetworkReply::downloadProgress, this, &MusicWinItem::dprogress);
 
+}
+
+QString MusicWinItem::getsongmsg()
+{
+    return ui->label_songmsg->text();
 }
 
 void MusicWinItem::read_data()
@@ -42,7 +49,11 @@ void MusicWinItem::read_data()
 
 void MusicWinItem::dprogress(qint64 rsize, qint64 asize)
 {
-    if(rsize == asize)
+    if(array.isNull())
+    {
+        return read_data();
+    }
+    if(rsize == asize && asize!=0)
     {
         QPixmap mmp;
         mmp.loadFromData(array);
@@ -52,3 +63,5 @@ void MusicWinItem::dprogress(qint64 rsize, qint64 asize)
         array.clear();
     }
 }
+
+

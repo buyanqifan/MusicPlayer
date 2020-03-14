@@ -19,10 +19,13 @@ public:
     ~MusicWinItem();
     void setsongmsg(QString songmsg);
     void setpic(QString picurl);
+    QString getsongmsg();
+
 
 private slots:
     void read_data();
     void dprogress(qint64 rsize, qint64 asize);
+
 
 private:
     Ui::MusicWinItem *ui;

@@ -16,6 +16,7 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
     ui(new Ui::MusicPlayer)
 {
     ui->setupUi(this);
+    //播放器和播放列表初始化
     mediaplayer = new QMediaPlayer;
     localmusiclist = new QMediaPlaylist;
     searchmusiclist = new QMediaPlaylist;
@@ -27,11 +28,16 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
     musiclist->setPlaybackMode(QMediaPlaylist::Loop);
     mediaplayer->setPlaylist(musiclist);
 
+    //初始化音量条
+    ui->horizontalSlider_volume->setRange(0, 100);
+     ui->horizontalSlider_volume->setValue(30);
     mediaplayer->setVolume(30);
 
     connect(&manager, &QNetworkAccessManager::finished, this, &MusicPlayer::read_data);
     connect(mediaplayer, &QMediaPlayer::durationChanged, this, &MusicPlayer::updateDuration); //当前播放音乐改变
     connect(mediaplayer, &QMediaPlayer::positionChanged, this, &MusicPlayer::updatePosition);
+    connect(ui->horizontalSlider_music, &QAbstractSlider::valueChanged, this, &MusicPlayer::setmusicPosition);
+    connect(ui->horizontalSlider_volume, &QAbstractSlider::valueChanged, this, &MusicPlayer::setvolumePosition);
 }
 
 MusicPlayer::~MusicPlayer()
@@ -185,17 +191,23 @@ void MusicPlayer::read_data(QNetworkReply *reply)
 
 }
 
+//双击播放搜索列表
 void MusicPlayer::on_listWidget_searchlist_itemDoubleClicked(QListWidgetItem *item)
 {
-    qDebug()<<item->text();
+    MusicWinItem * win = qobject_cast<MusicWinItem *>(ui->listWidget_searchlist->itemWidget(item));
+    qDebug()<<win->getsongmsg();
     int currentrow = ui->listWidget_searchlist->currentRow();
 
     //设置封面
     setpic(prclist.at(currentrow));
 
     //更新播放列表
-    musiclist = searchmusiclist;
-    mediaplayer->setPlaylist(musiclist);
+    musiclist->clear();
+    for(int i = 0; i<searchmusiclist->mediaCount(); i++)
+    {
+        musiclist->addMedia(searchmusiclist->media(i));
+    }
+    //mediaplayer->setPlaylist(musiclist);
     musiclist->setCurrentIndex(currentrow);
     mediaplayer->play();
 }
@@ -207,6 +219,13 @@ void MusicPlayer::updateDuration(qint64 duration)
     ui->horizontalSlider_music->setRange(0, static_cast<int>(duration));
     ui->label_duration->setText(formatTime(duration));
 
+    int current = musiclist->currentIndex();  //获取当前歌曲位置
+    //设置封面
+    if(!prclist.isEmpty()) {
+        setpic(prclist.at(current));
+    }
+    //更新播放位置
+    ui->listWidget_searchlist->setCurrentRow(current);
 
 }
 
@@ -233,7 +252,7 @@ void MusicPlayer::setpic(QString picurl)
     QUrl url(picurl);
     QNetworkRequest request(url);
 
-    QNetworkReply* reply = manager.get(request);
+    QNetworkReply* reply = manager_pic.get(request);
 
     connect(reply, &QNetworkReply::readyRead, this, &MusicPlayer::read_picdata);
 
@@ -251,15 +270,72 @@ void MusicPlayer::read_picdata()
 
 void MusicPlayer::dprogress(qint64 rsize, qint64 asize)
 {
-    if(rsize == asize)
+    //如果读取图片数据为空，重新读取
+    if(array.isNull())
+    {
+        return read_picdata();
+    }
+    if(rsize == asize && asize!=0)
     {
         QPixmap mmp;
         mmp.loadFromData(array);
-        QSize picSize(150,150);
+        QSize picSize(170,170);
         mmp = mmp.scaled(picSize, Qt::KeepAspectRatio);
         ui->label_pic->setPixmap(mmp);
         array.clear();
     }
 }
 
+//拖动进度条
+void MusicPlayer::setmusicPosition(int position)
+{
+    if (qAbs(mediaplayer->position() - position) > 99)  //防止进度条自己走动时修改进度条，出现卡顿
+    mediaplayer->setPosition(position);
+}
 
+//改变音量
+void MusicPlayer::setvolumePosition(int position)
+{
+    mediaplayer->setVolume(position);
+}
+
+
+
+void MusicPlayer::on_pushButton_prepage_clicked()
+{
+    if(searchoffset > 0) {
+        searchoffset--;
+    }
+    else {
+        return;
+    }
+    //清空歌曲列表
+    ui->listWidget_searchlist->clear();
+    searchmusiclist->clear();
+    prclist.clear();
+
+    QString songkey = ui->lineEdit_searchsong->text();
+
+
+    //获取请求对象
+    QUrl url(ApiOfSearch.arg(songkey).arg(searchoffset*20));
+    QNetworkRequest request(url);
+    //发送请求
+    manager.get(request);
+}
+
+void MusicPlayer::on_pushButton_nextpage_clicked()
+{
+    //清空歌曲列表
+    ui->listWidget_searchlist->clear();
+    searchmusiclist->clear();
+    prclist.clear();
+
+    QString songkey = ui->lineEdit_searchsong->text();
+    searchoffset++;
+    //获取请求对象
+    QUrl url(ApiOfSearch.arg(songkey).arg(searchoffset*20));
+    QNetworkRequest request(url);
+    //发送请求
+    manager.get(request);
+}

@@ -31,10 +31,11 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(170, 255, 255);</string>
+        <string notr="true">
+border-image: url(:/image/image/MyPlayer.png);</string>
        </property>
        <property name="text">
-        <string>专辑封面</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -66,14 +67,23 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
+       <property name="minimumSize">
+        <size>
+         <width>40</width>
+         <height>40</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>40</width>
-         <height>16777215</height>
+         <height>40</height>
         </size>
        </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/image/image/favorite.png);</string>
+       </property>
        <property name="text">
-        <string>喜欢</string>
+        <string/>
        </property>
       </widget>
      </item>

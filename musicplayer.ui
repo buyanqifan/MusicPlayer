@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>919</width>
-    <height>581</height>
+    <width>1075</width>
+    <height>677</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,10 +20,10 @@
    <widget class="QListWidget" name="listWidget_filelist">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>180</y>
+      <x>10</x>
+      <y>370</y>
       <width>191</width>
-      <height>231</height>
+      <height>121</height>
      </rect>
     </property>
    </widget>
@@ -32,8 +32,8 @@
      <rect>
       <x>210</x>
       <y>60</y>
-      <width>691</width>
-      <height>351</height>
+      <width>841</width>
+      <height>431</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -59,29 +59,30 @@
    <widget class="QLabel" name="label_pic">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>430</y>
-      <width>150</width>
-      <height>150</height>
+      <x>10</x>
+      <y>500</y>
+      <width>170</width>
+      <height>170</height>
      </rect>
     </property>
     <property name="minimumSize">
      <size>
-      <width>150</width>
-      <height>150</height>
+      <width>170</width>
+      <height>170</height>
      </size>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(0, 255, 255);</string>
+     <string notr="true">
+border-image: url(:/image/image/MyPlayer.png);</string>
     </property>
     <property name="text">
-     <string>音乐封面</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>10</x>
       <y>70</y>
       <width>101</width>
       <height>101</height>
@@ -97,7 +98,7 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>120</x>
       <y>110</y>
       <width>71</width>
       <height>31</height>
@@ -115,12 +116,12 @@
      <string>id</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>460</y>
-      <width>741</width>
+      <x>190</x>
+      <y>540</y>
+      <width>861</width>
       <height>101</height>
      </rect>
     </property>
@@ -247,12 +248,15 @@ QSlider::add-page:horizontal {
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>50</width>
            <height>50</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/image/image/previous.png);</string>
+         </property>
          <property name="text">
-          <string>上一首</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -266,12 +270,15 @@ QSlider::add-page:horizontal {
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>50</width>
            <height>50</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/image/image/play.png);</string>
+         </property>
          <property name="text">
-          <string>播放</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -285,12 +292,50 @@ QSlider::add-page:horizontal {
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>50</width>
            <height>50</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/image/image/next.png);</string>
+         </property>
          <property name="text">
-          <string>下一首</string>
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="minimumSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/image/image/music-voice-hover.png);</string>
+         </property>
+         <property name="text">
+          <string/>
          </property>
         </widget>
        </item>
@@ -369,6 +414,19 @@ QSlider::handle:horizontal:disabled {
         </widget>
        </item>
        <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QPushButton" name="pushButton_addfile">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -378,12 +436,15 @@ QSlider::handle:horizontal:disabled {
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>50</width>
            <height>50</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/image/image/music-file.png);</string>
+         </property>
          <property name="text">
-          <string>本地歌曲</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -397,12 +458,16 @@ QSlider::handle:horizontal:disabled {
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>50</width>
            <height>50</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">
+border-image: url(:/image/image/loop.png);</string>
+         </property>
          <property name="text">
-          <string>模式</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -416,12 +481,15 @@ QSlider::handle:horizontal:disabled {
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>50</width>
            <height>50</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/image/image/lyric.png);</string>
+         </property>
          <property name="text">
-          <string>歌词</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -435,12 +503,15 @@ QSlider::handle:horizontal:disabled {
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>50</width>
            <height>50</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/image/image/current-music.png);</string>
+         </property>
          <property name="text">
-          <string>收藏</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -448,18 +519,31 @@ QSlider::handle:horizontal:disabled {
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>210</x>
       <y>10</y>
-      <width>691</width>
+      <width>841</width>
       <height>32</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item>
         <widget class="QLineEdit" name="lineEdit_searchsong">
          <property name="minimumSize">
@@ -475,10 +559,38 @@ QSlider::handle:horizontal:disabled {
        </item>
        <item>
         <widget class="QPushButton" name="pushButton_search">
+         <property name="minimumSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border-image: url(:/image/image/search.png);</string>
+         </property>
          <property name="text">
-          <string>搜索</string>
+          <string/>
          </property>
         </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item>
         <widget class="QComboBox" name="comboBox">
@@ -545,6 +657,126 @@ QSlider::handle:horizontal:disabled {
        </property>
        <property name="text">
         <string>登录</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>180</y>
+      <width>72</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>推荐</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_6">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>200</y>
+      <width>191</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>我的音乐</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_8">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>230</y>
+      <width>191</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_9">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>260</y>
+      <width>191</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>290</y>
+      <width>72</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>歌单</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_10">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>310</y>
+      <width>191</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>我喜欢的音乐</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_11">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>340</y>
+      <width>191</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>860</x>
+      <y>500</y>
+      <width>195</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="pushButton_prepage">
+       <property name="text">
+        <string>上一页</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_nextpage">
+       <property name="text">
+        <string>下一页</string>
        </property>
       </widget>
      </item>

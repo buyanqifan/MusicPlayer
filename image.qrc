@@ -1,2 +1,20 @@
-<!DOCTYPE RCC>
-<RCC version="1.0"/>
+<RCC>
+    <qresource prefix="/image">
+        <file>image/music-voice-hover.png</file>
+        <file>image/favorite.png</file>
+        <file>image/folder.png</file>
+        <file>image/shuffle.png</file>
+        <file>image/next.png</file>
+        <file>image/pause.png</file>
+        <file>image/play.png</file>
+        <file>image/previous.png</file>
+        <file>image/search.png</file>
+        <file>image/volume.png</file>
+        <file>image/sequence.png</file>
+        <file>image/loop.png</file>
+        <file>image/lyric.png</file>
+        <file>image/music-file.png</file>
+        <file>image/MyPlayer.png</file>
+        <file>image/current-music.png</file>
+    </qresource>
+</RCC>

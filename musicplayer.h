@@ -25,6 +25,7 @@ public:
     QString formatTime(qint64 timeMilliSeconds);
     void setpic(QString picurl);
 
+
 private slots:
     void on_pushButton_addfile_clicked();
 
@@ -44,6 +45,12 @@ private slots:
     void updatePosition(qint64 position);
     void read_picdata();
     void dprogress(qint64 rsize, qint64 asize);
+    void setmusicPosition(int position);
+    void setvolumePosition(int position);
+
+    void on_pushButton_prepage_clicked();
+
+    void on_pushButton_nextpage_clicked();
 
 private:
     Ui::MusicPlayer *ui;
@@ -60,6 +67,7 @@ private:
 
     //管理器
     QNetworkAccessManager manager;
+    QNetworkAccessManager manager_pic;
     QByteArray array;
 
     //图片列表
@@ -68,7 +76,7 @@ private:
     //音乐搜索API
     //参数%1：搜索关键字
     //参数%2：页数
-    const QString ApiOfSearch = "https://api.imjad.cn/cloudmusic/?type=search&s=%1&offset=0";
+    const QString ApiOfSearch = "https://api.imjad.cn/cloudmusic/?type=search&s=%1&offset=%2";
     qint32 searchoffset;    //搜索页数
     //歌曲链接API
     //参数%1：歌曲id

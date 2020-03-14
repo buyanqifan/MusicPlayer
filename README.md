@@ -3,8 +3,9 @@
 基于Qt5开发的在线音乐播放器。 （未完成）
 
 v1.1
-修复了部分图片不能显示的问题
-完善了一些功能，更新了一些ui
+1.修复了部分图片不能显示的问题
+2.完善了一些功能，更新了一些ui
+
 ![image](https://github.com/buyanqifan/MusicPlayer/blob/master/image/pic/picv1.1.png)
 
 

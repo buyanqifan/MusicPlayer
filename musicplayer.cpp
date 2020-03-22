@@ -23,7 +23,6 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
     lovemusiclist = new QMediaPlaylist;
     musiclist = new QMediaPlaylist;
 
-
     //设置播放模式：循环播放
     musiclist->setPlaybackMode(QMediaPlaylist::Loop);
     mediaplayer->setPlaylist(musiclist);
@@ -33,19 +32,38 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
      ui->horizontalSlider_volume->setValue(30);
     mediaplayer->setVolume(30);
 
-    connect(&manager, &QNetworkAccessManager::finished, this, &MusicPlayer::read_data);
+    //添加数据库驱动 创建打开数据库 初始化数据库
+    sql = new SQL;
+    sql->opensql("music.db");
+    //创建searchmusiclist表格
+    sql->creattable("searchmusiclist");
+    //创建lovemusiclist表格
+    sql->creattable("lovemusiclist");
+
+    //初始化音乐api
+    wangyiapi = new Wangyiapi;
+    qqmapi = new qqapi;
+    kuwoapi = new Kuwoapi;
+    kugouapi = new Kugouapi;
+    miguapi = new Miguapi;
+    baiduapi = new Baiduapi;
+
     connect(mediaplayer, &QMediaPlayer::durationChanged, this, &MusicPlayer::updateDuration); //当前播放音乐改变
     connect(mediaplayer, &QMediaPlayer::positionChanged, this, &MusicPlayer::updatePosition);
     connect(ui->horizontalSlider_music, &QAbstractSlider::valueChanged, this, &MusicPlayer::setmusicPosition);
     connect(ui->horizontalSlider_volume, &QAbstractSlider::valueChanged, this, &MusicPlayer::setvolumePosition);
+    connect(wangyiapi, &Wangyiapi::Finishsignal, this, &MusicPlayer::updatesearchmusiclist);
+    connect(qqmapi, &qqapi::Finishsignal, this, &MusicPlayer::updatesearchmusiclist);
+    connect(kuwoapi, &Kuwoapi::Finishsignal, this, &MusicPlayer::updatesearchmusiclist);
+    connect(kugouapi, &Kugouapi::Finishsignal, this, &MusicPlayer::updatesearchmusiclist);
+    connect(miguapi, &Miguapi::Finishsignal, this, &MusicPlayer::updatesearchmusiclist);
+    connect(baiduapi, &Baiduapi::Finishsignal, this, &MusicPlayer::updatesearchmusiclist);
 }
 
 MusicPlayer::~MusicPlayer()
 {
     delete ui;
 }
-
-
 
 void MusicPlayer::on_pushButton_addfile_clicked()
 {
@@ -107,87 +125,23 @@ void MusicPlayer::on_pushButton_next_clicked()
 
 void MusicPlayer::on_pushButton_search_clicked()
 {
-    //清空歌曲列表
+    //清空歌曲列表 清空各种数据
     ui->listWidget_searchlist->clear();
     searchmusiclist->clear();
     prclist.clear();
+    sql->deletetable("searchmusiclist");
 
-    QString songkey = ui->lineEdit_searchsong->text();
+    //搜索
     searchoffset = 0;   //默认为第一页
-    //获取请求对象
-    QUrl url(ApiOfSearch.arg(songkey).arg(searchoffset));
-    QNetworkRequest request(url);
-    //发送请求
-    manager.get(request);
+    QString songkey = ui->lineEdit_searchsong->text();
+    if(ui->comboBox_api->currentIndex() < 2) wangyiapi->search(songkey);//网易云
+    else if(ui->comboBox_api->currentIndex() == 2) qqmapi->search(songkey);//qq音乐
+    else if(ui->comboBox_api->currentIndex() == 3) kugouapi->search(songkey);//酷狗音乐
+    else if(ui->comboBox_api->currentIndex() == 4) kuwoapi->search(songkey);//酷我音乐
+    else if(ui->comboBox_api->currentIndex() == 5) miguapi->search(songkey);//咪咕音乐
+    else if(ui->comboBox_api->currentIndex() == 6) baiduapi->search(songkey);//百度音乐
+    else return;
 
-}
-
-void MusicPlayer::read_data(QNetworkReply *reply)
-{
-    QString data = reply->readAll();
-    //qDebug()<<data;
-    //json解析
-    QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8(),&err);    //字符串数据与json对象转换
-    if(err.error != QJsonParseError::NoError)   //检查data是否是json格式
-    {
-        qDebug()<<"json error";
-        return;
-    }
-
-    //开始解析
-    QJsonObject obj = doc.object();
-    //根据result获取对象
-    QJsonObject resultobj = obj.value("result").toObject();
-    //根据songs获取数组
-    QJsonArray songsarr = resultobj.value("songs").toArray();
-
-    //遍历数组
-    for(int i = 0; i<songsarr.count(); i++)
-    {
-        QJsonObject songobj = songsarr.at(i).toObject();    //获取数组中的第i个对象
-
-        QString songname = songobj.value("name").toString();    //歌曲名
-        int songid = songobj.value("id").toInt();    //歌曲id
-        //根据al获取对象
-        QJsonObject alobj = songobj.value("al").toObject();
-        QString picUrl = alobj.value("picUrl").toString();  //专辑/音乐封面
-
-        //根据ar获取数组
-        QJsonArray ararr = songobj.value("ar").toArray();
-        //遍历数组
-        QString arname; //歌手名
-        for(int i = 0; i<ararr.count(); i++)
-        {
-            QJsonObject alnameobj = ararr.at(i).toObject();
-            if(i > 0)
-            {
-                arname.append(",");
-            }
-            arname.append(alnameobj.value("name").toString());
-
-        }
-
-        //拼接歌曲信息
-        QString songmsg = songname.append(" - ");
-        songmsg.append(arname);
-        //在搜索列表中显示
-        //ui->listWidget_searchlist->addItem(songmsg);
-        MusicWinItem *musicitem = new MusicWinItem;
-        musicitem->setsongmsg(songmsg);
-        musicitem->setpic(picUrl);
-        QListWidgetItem * item = new QListWidgetItem;
-        item->setSizeHint(musicitem->sizeHint());
-        ui->listWidget_searchlist->addItem(item);
-        ui->listWidget_searchlist->setItemWidget(item,musicitem);
-
-        //将图片连接添加到图片列表
-        prclist.append(picUrl);
-        //将搜索的歌曲添加进搜索列表
-        searchmusiclist->setPlaybackMode(QMediaPlaylist::Loop);
-        searchmusiclist->addMedia(QUrl(ApiOfSongLink.arg(songid)));
-        qDebug()<<QUrl(ApiOfSongLink.arg(songid));
-    }
 
 }
 
@@ -221,7 +175,7 @@ void MusicPlayer::updateDuration(qint64 duration)
 
     int current = musiclist->currentIndex();  //获取当前歌曲位置
     //设置封面
-    if(!prclist.isEmpty()) {
+    if(current > 0) {
         setpic(prclist.at(current));
     }
     //更新播放位置
@@ -299,6 +253,44 @@ void MusicPlayer::setvolumePosition(int position)
     mediaplayer->setVolume(position);
 }
 
+//搜索完成 更新列表
+void MusicPlayer::updatesearchmusiclist()
+{
+    //查询数据
+    QSqlQuery query;
+    query.exec("select * from searchmusiclist");
+    if(!query.exec())
+    {
+        qDebug()<<"select error";
+    }
+    else
+    {
+        while(query.next())
+        {
+            QString id = query.value(1).toString();
+            QString songmsg = query.value(2).toString();
+            QString picurl = query.value(3).toString();
+            QString songurl = query.value(4).toString();
+            //在搜索列表中显示
+            //ui->listWidget_searchlist->addItem(songmsg);
+            MusicWinItem *musicitem = new MusicWinItem;
+            musicitem->setsongmsg(songmsg);
+            musicitem->setpic(picurl);
+            QListWidgetItem * item = new QListWidgetItem;
+            item->setSizeHint(musicitem->sizeHint());
+            ui->listWidget_searchlist->addItem(item);
+            ui->listWidget_searchlist->setItemWidget(item,musicitem);
+            //将图片连接添加到图片列表
+            prclist.append(picurl);
+            //将搜索的歌曲添加进搜索列表
+            searchmusiclist->setPlaybackMode(QMediaPlaylist::Loop);
+            searchmusiclist->addMedia(QUrl(songurl));
+            //qDebug()<<"插入数据库"<<songmsg;
+            //qDebug()<<QString("songid:%1    songmsg:%2    picurl:%3    songurl:%4").arg(id).arg(songmsg).arg(picurl).arg(songurl);
+        }
+    }
+}
+
 
 
 void MusicPlayer::on_pushButton_prepage_clicked()
@@ -309,33 +301,38 @@ void MusicPlayer::on_pushButton_prepage_clicked()
     else {
         return;
     }
-    //清空歌曲列表
+    //清空歌曲列表 清空各种数据
     ui->listWidget_searchlist->clear();
     searchmusiclist->clear();
     prclist.clear();
+    sql->deletetable("searchmusiclist");
 
     QString songkey = ui->lineEdit_searchsong->text();
+    if(ui->comboBox_api->currentIndex() < 2) wangyiapi->prepage(songkey);//网易云
+    else if(ui->comboBox_api->currentIndex() == 2) qqmapi->prepage(songkey);//qq音乐
+    else if(ui->comboBox_api->currentIndex() == 3) kugouapi->prepage(songkey);//酷狗音乐
+    else if(ui->comboBox_api->currentIndex() == 4) kuwoapi->prepage(songkey);//酷我音乐
+    else if(ui->comboBox_api->currentIndex() == 5) miguapi->prepage(songkey);//咪咕音乐
+    else if(ui->comboBox_api->currentIndex() == 6) baiduapi->prepage(songkey);//百度音乐
+    else return;
 
-
-    //获取请求对象
-    QUrl url(ApiOfSearch.arg(songkey).arg(searchoffset*20));
-    QNetworkRequest request(url);
-    //发送请求
-    manager.get(request);
 }
 
 void MusicPlayer::on_pushButton_nextpage_clicked()
 {
-    //清空歌曲列表
+    searchoffset++;
+    //清空歌曲列表 清空各种数据
     ui->listWidget_searchlist->clear();
     searchmusiclist->clear();
     prclist.clear();
+    sql->deletetable("searchmusiclist");
 
     QString songkey = ui->lineEdit_searchsong->text();
-    searchoffset++;
-    //获取请求对象
-    QUrl url(ApiOfSearch.arg(songkey).arg(searchoffset*20));
-    QNetworkRequest request(url);
-    //发送请求
-    manager.get(request);
+    if(ui->comboBox_api->currentIndex() < 2) wangyiapi->nextpage(songkey);//网易云
+    else if(ui->comboBox_api->currentIndex() == 2) qqmapi->nextpage(songkey);//qq音乐
+    else if(ui->comboBox_api->currentIndex() == 3) kugouapi->nextpage(songkey);//酷狗音乐
+    else if(ui->comboBox_api->currentIndex() == 4) kuwoapi->nextpage(songkey);//酷我音乐
+    else if(ui->comboBox_api->currentIndex() == 5) miguapi->nextpage(songkey);//咪咕音乐
+    else if(ui->comboBox_api->currentIndex() == 6) baiduapi->nextpage(songkey);//百度音乐
+    else return;
 }

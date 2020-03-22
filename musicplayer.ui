@@ -26,6 +26,9 @@
       <height>121</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
    </widget>
    <widget class="QListWidget" name="listWidget_searchlist">
     <property name="geometry">
@@ -50,10 +53,11 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 56, 30);</string>
+     <string notr="true">
+border-image: url(:/image/image/logo.png);</string>
     </property>
     <property name="text">
-     <string>logo</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label_pic">
@@ -354,58 +358,33 @@ QSlider::add-page:horizontal {
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">QSlider::groove:horizontal {  
-	border: 1px solid #bbb;  
-	background: white;  
-	height: 10px;  
-	border-radius: 4px;  
-}  
-  
-QSlider::sub-page:horizontal {  
-	background: qlineargradient(x1: 0, y1: 0,    x2: 0, y2: 1,  stop: 0 #66e, stop: 1 #bbf);  
-	background: qlineargradient(x1: 0, y1: 0.2, x2: 1, y2: 1,  stop: 0 #bbf, stop: 1 #55f);  
-	border: 1px solid #777;  
-	height: 10px;  
-	border-radius: 4px;  
-}  
-  
-QSlider::add-page:horizontal {  
-	background: #fff;  
-	border: 1px solid #777;  
-	height: 10px;  
-	border-radius: 4px;  
-}  
-  
-QSlider::handle:horizontal {  
-	background: qlineargradient(x1:0, y1:0, x2:1, y2:1,  stop:0 #eee, stop:1 #ccc);  
-	border: 1px solid #777;  
-	width: 13px;  
-	margin-top: -2px;  
-	margin-bottom: -2px;  
-	border-radius: 4px;  
-}  
-  
-QSlider::handle:horizontal:hover {  
-	background: qlineargradient(x1:0, y1:0, x2:1, y2:1,  stop:0 #fff, stop:1 #ddd);  
-	border: 1px solid #444;  
-	border-radius: 4px;  
-}  
-  
-QSlider::sub-page:horizontal:disabled {  
-	background: #bbb;  
-	border-color: #999;  
-}  
-  
-QSlider::add-page:horizontal:disabled {  
-	background: #eee;  
-	border-color: #999;  
-}  
-  
-QSlider::handle:horizontal:disabled {  
-	background: #eee;  
-	border: 1px solid #aaa;  
-	border-radius: 4px;  
-}  
+          <string notr="true">QSlider::groove:horizontal {
+    border: none;
+    height: 6px;
+    border-radius: 3px;
+    background: lightgray;
+}
+QSlider::handle:horizontal {
+    border: none;
+    margin: -5px 0px; /* 上下边距和左右边距*/
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background: #e83c3c;
+    border-image: url(:/images/playPbHandle16_White.png);
+}
+/*划过部分*/
+QSlider::sub-page:horizontal {
+    background: #e83c3c;
+    height: 4px;
+    border-radius: 3px;
+}
+/*未划过部分*/
+QSlider::add-page:horizontal {
+    background: lightgray;
+    height: 4px;
+    border-radius: 3px;
+}
 </string>
          </property>
          <property name="orientation">
@@ -593,7 +572,7 @@ border-image: url(:/image/image/loop.png);</string>
         </spacer>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="comboBox_api">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -623,6 +602,11 @@ border-image: url(:/image/image/loop.png);</string>
          <item>
           <property name="text">
            <string>酷我</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>咪咕</string>
           </property>
          </item>
          <item>
@@ -750,7 +734,7 @@ border-image: url(:/image/image/loop.png);</string>
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>网易云歌单</string>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">

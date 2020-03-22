@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network multimedia
+QT       += core gui network multimedia sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,11 +27,25 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         musicplayer.cpp \
-    musicwinitem.cpp
+    musicwinitem.cpp \
+    sql.cpp \
+    wangyiapi.cpp \
+    qqapi.cpp \
+    kugouapi.cpp \
+    kuwoapi.cpp \
+    miguapi.cpp \
+    baiduapi.cpp
 
 HEADERS += \
         musicplayer.h \
-    musicwinitem.h
+    musicwinitem.h \
+    sql.h \
+    wangyiapi.h \
+    qqapi.h \
+    kugouapi.h \
+    kuwoapi.h \
+    miguapi.h \
+    baiduapi.h
 
 FORMS += \
         musicplayer.ui \

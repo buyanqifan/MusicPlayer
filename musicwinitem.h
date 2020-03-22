@@ -22,6 +22,7 @@ public:
     QString getsongmsg();
 
 
+
 private slots:
     void read_data();
     void dprogress(qint64 rsize, qint64 asize);

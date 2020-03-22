@@ -8,7 +8,15 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QListWidget>
-
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include "sql.h"
+#include "wangyiapi.h"
+#include "qqapi.h"
+#include "kugouapi.h"
+#include "kuwoapi.h"
+#include "miguapi.h"
+#include "baiduapi.h"
 
 namespace Ui {
 class MusicPlayer;
@@ -37,8 +45,6 @@ private slots:
 
     void on_pushButton_search_clicked();
 
-    void read_data(QNetworkReply *reply);
-
     void on_listWidget_searchlist_itemDoubleClicked(QListWidgetItem *item);
 
     void updateDuration(qint64 duration);
@@ -47,6 +53,7 @@ private slots:
     void dprogress(qint64 rsize, qint64 asize);
     void setmusicPosition(int position);
     void setvolumePosition(int position);
+    void updatesearchmusiclist();
 
     void on_pushButton_prepage_clicked();
 
@@ -66,12 +73,21 @@ private:
     QMediaPlaylist *musiclist;
 
     //管理器
-    QNetworkAccessManager manager;
     QNetworkAccessManager manager_pic;
     QByteArray array;
 
     //图片列表
     QStringList prclist;
+    //数据库
+    SQL *sql;
+
+    //网易云 qq
+    Wangyiapi *wangyiapi;
+    qqapi *qqmapi;
+    Kugouapi *kugouapi;
+    Kuwoapi *kuwoapi;
+    Miguapi *miguapi;
+    Baiduapi *baiduapi;
 
     //音乐搜索API
     //参数%1：搜索关键字

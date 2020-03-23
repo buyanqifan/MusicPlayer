@@ -165,6 +165,7 @@ void MusicPlayer::on_listWidget_searchlist_itemDoubleClicked(QListWidgetItem *it
     //mediaplayer->setPlaylist(musiclist);
     musiclist->setCurrentIndex(currentrow);
     mediaplayer->play();
+
 }
 
 
@@ -181,6 +182,13 @@ void MusicPlayer::updateDuration(qint64 duration)
     }
     //更新播放位置
     ui->listWidget_searchlist->setCurrentRow(current);
+
+    //判断音源是否有效
+    if(!mediaplayer->isAudioAvailable())
+    {
+        qDebug()<<"无音源";
+        on_pushButton_next_clicked();
+    }
 
 }
 

@@ -17,5 +17,7 @@
         <file>image/MyPlayer.png</file>
         <file>image/current-music.png</file>
         <file>image/logo.png</file>
+        <file>image/userpic.png</file>
+        <file>image/cdlogo.png</file>
     </qresource>
 </RCC>

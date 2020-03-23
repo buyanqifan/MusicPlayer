@@ -34,7 +34,8 @@ SOURCES += \
     kugouapi.cpp \
     kuwoapi.cpp \
     miguapi.cpp \
-    baiduapi.cpp
+    baiduapi.cpp \
+    signinwin.cpp
 
 HEADERS += \
         musicplayer.h \
@@ -45,11 +46,13 @@ HEADERS += \
     kugouapi.h \
     kuwoapi.h \
     miguapi.h \
-    baiduapi.h
+    baiduapi.h \
+    signinwin.h
 
 FORMS += \
         musicplayer.ui \
-    musicwinitem.ui
+    musicwinitem.ui \
+    signinwin.ui
 
 CONFIG += mobility
 MOBILITY = 

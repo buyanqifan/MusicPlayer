@@ -34,8 +34,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">
-border-image: url(:/image/image/MyPlayer.png);</string>
+        <string notr="true">border-image: url(:/image/image/cdlogo.png);</string>
        </property>
        <property name="text">
         <string/>

@@ -1,6 +1,7 @@
 #include "musicplayer.h"
 #include "ui_musicplayer.h"
 #include "musicwinitem.h"
+#include "signinwin.h"
 #include <QFileDialog>
 #include <QDebug>
 
@@ -291,6 +292,34 @@ void MusicPlayer::updatesearchmusiclist()
     }
 }
 
+void MusicPlayer::updatusermsg(int userid, QString username, QString userpic)
+{
+    Userid = userid;
+    ui->label_username->setText(username);
+    QUrl url(userpic);
+    QNetworkRequest request(url);
+    QNetworkAccessManager manager_userpic;
+    QNetworkReply* replyuserpic = manager_userpic.get(request);
+    //等待读取数据
+    QEventLoop eventLoop;
+    connect(replyuserpic, &QNetworkReply::finished, &eventLoop, &QEventLoop::quit);
+    eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
+    //读取数据
+    QByteArray arraypic = replyuserpic->readAll();
+    //如果读取图片数据为空，重新读取
+    if(arraypic.isNull())
+    {
+        return updatusermsg(userid,username,userpic);
+    }
+    QPixmap mmp;
+    mmp.loadFromData(arraypic);
+    QSize picSize(100,100);
+    mmp = mmp.scaled(picSize, Qt::KeepAspectRatio);
+    ui->label_userpic->setPixmap(mmp);
+    arraypic.clear();
+
+}
+
 
 
 void MusicPlayer::on_pushButton_prepage_clicked()
@@ -335,4 +364,11 @@ void MusicPlayer::on_pushButton_nextpage_clicked()
     else if(ui->comboBox_api->currentIndex() == 5) miguapi->nextpage(songkey);//咪咕音乐
     else if(ui->comboBox_api->currentIndex() == 6) baiduapi->nextpage(songkey);//百度音乐
     else return;
+}
+
+void MusicPlayer::on_pushButton_signin_clicked()
+{
+    SigninWin *loginwindow = new SigninWin;
+    loginwindow->show();
+    connect(loginwindow, &SigninWin::signinsignal, this, &MusicPlayer::updatusermsg);
 }

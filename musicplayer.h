@@ -54,10 +54,13 @@ private slots:
     void setmusicPosition(int position);
     void setvolumePosition(int position);
     void updatesearchmusiclist();
+    void updatusermsg(int userid, QString username, QString userpic);
 
     void on_pushButton_prepage_clicked();
 
     void on_pushButton_nextpage_clicked();
+
+    void on_pushButton_signin_clicked();
 
 private:
     Ui::MusicPlayer *ui;
@@ -81,6 +84,9 @@ private:
     //数据库
     SQL *sql;
 
+    //用户id
+    int Userid;
+
     //网易云 qq
     Wangyiapi *wangyiapi;
     qqapi *qqmapi;
@@ -89,14 +95,10 @@ private:
     Miguapi *miguapi;
     Baiduapi *baiduapi;
 
-    //音乐搜索API
-    //参数%1：搜索关键字
-    //参数%2：页数
-    const QString ApiOfSearch = "https://api.imjad.cn/cloudmusic/?type=search&s=%1&offset=%2";
-    qint32 searchoffset;    //搜索页数
-    //歌曲链接API
-    //参数%1：歌曲id
-    const QString ApiOfSongLink = "https://music.163.com/song/media/outer/url?id=%1.mp3";
+    //搜索页数
+    qint32 searchoffset;
+
+
 
 };
 
